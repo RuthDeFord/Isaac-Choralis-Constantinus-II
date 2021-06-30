@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Catalogue of variants</title>
+
+    <script src="https://unpkg.com/ag-grid-enterprise/dist/ag-grid-enterprise.min.noStyle.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-alpine.css">
+    <style>
+        html,
+        body {
+
+            height: 100%;
+
+            margin: 0px;
+
+        }
+
+        .cell-wrap-text {
+            word-break: normal
+        }
+    </style>
+</head>
+
+<body>
+    <div id="root" style="width:100%; height: 100%;">
+        <div id="main" style="width:100%;">
+            <h3>Catalogue</hr>
+        </div>
+        <div id="myGrid" style="width:100%; height:90%" class="ag-theme-alpine"></div>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+        // specify the columns
+        var columnDefs = [
+            //      {headerName: "Source code", field: "Source code"},
+            { headerName: "Source", field: "Source", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
+            { headerName: "Piece", field: "Piece", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
+            { headerName: "Voice", field: "Voice", floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
+            { headerName: "Location", field: "Location", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
+            { headerName: "Reading", field: "Reading", floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
+            { headerName: "Type", field: "Type", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
+            { headerName: "Subtype", field: "Subtype", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
+            { headerName: "Variant code", field: "Variant code", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true }
+        ];
+        /*
+            var autoGroupColumnDef = {
+                headerName: "Source",
+                field: "Source",
+                cellRenderer:'agGroupCellRenderer',
+                cellRendererParams: {
+                    checkbox: true
+                }
+            }
+        */
+        // let the grid know which columns and what data to use
+        var gridOptions = {
+            defaultColDef: {
+                sortable: true,
+                filter: true, // set filtering on for all columns
+                wrapText: true,
+                autoHeight: true,
+                cellClass: "cell-wrap-text"
+            },
+            columnDefs: columnDefs,
+            //      autoGroupColumnDef: autoGroupColumnDef,
+            groupSelectsChildren: true,
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            groupDefaultExpanded: -1,
+            multiSortKey: 'ctrl',
+            suppresSorting: true
+        };
+
+        // lookup the container we want the Grid to use
+        var eGridDiv = document.querySelector('#myGrid');
+
+        // create the grid passing in the div to use together with the columns & data we want to use
+        new agGrid.Grid(eGridDiv, gridOptions);
+
+        agGrid.simpleHttpRequest({ url: 'http://pitch-cv.com/csvjson.json' }).then(function (data) {
+            gridOptions.api.setRowData(data);
+        });
+        /*
+        sortModel = [
+            { colId: 'Variant code', sort: 'asc' },
+            { colId: 'Source', sort: 'asc' },
+            { colId: 'Piece', sort: 'asc' },
+            { colId: 'Voice', sort: 'asc' },
+            { colId: 'Location', sort: 'asc' }
+        ];
+        gridOptions.api.setSortModel(sortModel);
+        */
+
+        function getSelectedRows() {
+            const selectedNodes = gridOptions.api.getSelectedNodes()
+            const selectedData = selectedNodes.map(function (node) { return node.data })
+            const selectedDataStringPresentation = selectedData.map(function (node) { return node.make + ' ' + node.model }).join(', ')
+            alert('Selected nodes: ' + selectedDataStringPresentation);
+        }
+    </script>
+</body>
+
+</html>

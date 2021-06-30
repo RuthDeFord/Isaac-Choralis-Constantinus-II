@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <title>Catalogue of variants</title>
+
+    <script src="https://unpkg.com/ag-grid-enterprise/dist/ag-grid-enterprise.min.noStyle.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-grid.css">
+    <link rel="stylesheet" href="https://unpkg.com/ag-grid-community/dist/styles/ag-theme-alpine.css">
+    <style>
+        html,
+        body {
+
+            height: 100%;
+
+            margin: 0px;
+
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="root" style="width:100%; height: 100%;">
+        <div id="main" style="width:100%;">
+            <h3>Catalogue of variants</h3>
+
+            Variants in the following catalogue may be selected by any column and sorted by any combination of
+            source, piece, type, and subtype.<p>
+
+                <b>To select variants:</b>
+            <p>
+
+                Click the funnel next to the box under a column heading and check categories to include.
+            <p>
+
+                <b>To sort and group variants:</b>
+            <p>
+
+                The default sort order is: Source (prints, with <i>Choralis II</i> first, then manuscripts),
+                Piece (liturgical order), Voice (D, A, T, B), Location (verse, if applicable, then measures).
+                Useful modifications to the default display include:
+            <p>
+
+            <ul>
+                <li>To retain the default order, but display the sources and pieces as groups, drag the column
+                    headings for source, then piece, to the "set row groups" box. This provides visual clarity and
+                    shows the number of items in each category and subcategory.</li>
+                <p>
+
+                    <li>To sort by piece, then source, drag the same column headings to the "set row groups" box
+                        in the opposite order.</li>
+                <p>
+
+                    <li>To collate the variants in multiple sources, so that their corresponding variants are
+                        adjacent, group the variants by piece, then location, by dragging the column headings as above.
+                    </li>
+                <p>
+
+                    <li>To group results by type, and optionally by subtype, drag those column names to the “set row
+                        groups” box. This analysis is useful for determining the number of variants of each type
+                        in a given source and for observing the nature of the specific variants within each category.
+                        It provides the clearest results if only one source is selected at a time. The order of the
+                        variant types will be determined by the content of the search; it will not be alphabetical.</li>
+            </ul>
+
+            If only one source or piece is selected in any search, there is no need to apply group-level
+            sorting to that parameter.
+
+
+        </div>
+        <div id="myGrid" style="width:100%; height:50%" class="ag-theme-alpine"></div>
+    </div>
+    <script type="text/javascript" charset="utf-8">
+        // specify the columns
+        var columnDefs = [
+            //      {headerName: "Source code", field: "Source code"},
+            //      {headerName: "Variant code", field: "Variant code"},
+            { headerName: "Source", field: "Source", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
+            { headerName: "Piece", field: "Piece", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
+            { headerName: "Voice", field: "Voice", floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
+            { headerName: "Location", field: "Location", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
+            { headerName: "Reading", field: "Reading", floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
+            { headerName: "Type", field: "Type", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
+            { headerName: "Subtype", field: "Subtype", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true }
+        ];
+        /*
+            var autoGroupColumnDef = {
+                headerName: "Source",
+                field: "Source",
+                cellRenderer:'agGroupCellRenderer',
+                cellRendererParams: {
+                    checkbox: true
+                }
+            }
+        */
+        // let the grid know which columns and what data to use
+        var gridOptions = {
+            defaultColDef: {
+                sortable: false,
+                filter: true, // set filtering on for all columns
+                wrapText: true,
+                autoHeight: true
+            },
+            columnDefs: columnDefs,
+            //      autoGroupColumnDef: autoGroupColumnDef,
+            groupSelectsChildren: true,
+            rowSelection: 'multiple',
+            rowGroupPanelShow: 'always',
+            groupDefaultExpanded: -1,
+            // multiSortKey: 'ctrl',
+        };
+
+        // lookup the container we want the Grid to use
+        var eGridDiv = document.querySelector('#myGrid');
+
+        // create the grid passing in the div to use together with the columns & data we want to use
+        new agGrid.Grid(eGridDiv, gridOptions);
+
+        agGrid.simpleHttpRequest({ url: 'http://pitch-cv.com/csvjson.json' }).then(function (data) {
+            gridOptions.api.setRowData(data);
+        });
+
+        sortModel = [
+            { colId: 'Source', sort: 'asc' },
+            { colId: 'Piece', sort: 'asc' },
+            { colId: 'Voice', sort: 'asc' },
+            { colId: 'Location', sort: 'asc' }
+        ];
+        // gridOptions.api.setSortModel(sortModel);
+
+        function getSelectedRows() {
+            const selectedNodes = gridOptions.api.getSelectedNodes()
+            const selectedData = selectedNodes.map(function (node) { return node.data })
+            const selectedDataStringPresentation = selectedData.map(function (node) { return node.make + ' ' + node.model }).join(', ')
+            alert('Selected nodes: ' + selectedDataStringPresentation);
+        }
+    </script>
+</body>
+
+</html>
