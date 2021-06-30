@@ -118,7 +118,7 @@
         // create the grid passing in the div to use together with the columns & data we want to use
         new agGrid.Grid(eGridDiv, gridOptions);
 
-        agGrid.simpleHttpRequest({ url: 'http://pitch-cv.com/csvjson.json' }).then(function (data) {
+        agGrid.simpleHttpRequest({ url: '../variants.json' }).then(function (data) {
             gridOptions.api.setRowData(data);
         });
 
