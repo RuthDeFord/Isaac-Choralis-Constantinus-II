@@ -17,6 +17,10 @@
             margin: 0px;
 
         }
+
+        .cell-wrap-text {
+            word-break: normal
+        }
     </style>
 </head>
 
@@ -102,7 +106,7 @@
                 filter: true, // set filtering on for all columns
                 wrapText: true,
                 autoHeight: true,
-                //cellClass: "cell-wrap-text"
+                cellClass: "cell-wrap-text"
             },
             columnDefs: columnDefs,
             //      autoGroupColumnDef: autoGroupColumnDef,
