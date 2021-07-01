@@ -76,14 +76,14 @@
         // specify the columns
         var columnDefs = [
             //      {headerName: "Source code", field: "Source code"},
-            //      {headerName: "Variant code", field: "Variant code"},
             { headerName: "Source", field: "Source", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
             { headerName: "Piece", field: "Piece", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
             { headerName: "Voice", field: "Voice", floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
             { headerName: "Location", field: "Location", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
             { headerName: "Reading", field: "Reading", floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
             { headerName: "Type", field: "Type", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
-            { headerName: "Subtype", field: "Subtype", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true }
+            { headerName: "Subtype", field: "Subtype", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true },
+            { headerName: "Variant code", field: "Variant code", enableRowGroup: true, floatingFilter: true, suppressMovable: true, suppressDragLeaveHidesColumns: true }
         ];
         /*
             var autoGroupColumnDef = {
@@ -101,7 +101,8 @@
                 sortable: false,
                 filter: true, // set filtering on for all columns
                 wrapText: true,
-                autoHeight: true
+                autoHeight: true,
+                cellClass: "cell-wrap-text"
             },
             columnDefs: columnDefs,
             //      autoGroupColumnDef: autoGroupColumnDef,
@@ -109,7 +110,7 @@
             rowSelection: 'multiple',
             rowGroupPanelShow: 'always',
             groupDefaultExpanded: -1,
-            // multiSortKey: 'ctrl',
+            multiSortKey: 'ctrl'
         };
 
         // lookup the container we want the Grid to use
@@ -121,14 +122,16 @@
         agGrid.simpleHttpRequest({ url: '../variants.json' }).then(function (data) {
             gridOptions.api.setRowData(data);
         });
-
+        /*
         sortModel = [
+            { colId: 'Variant code', sort: 'asc' },
             { colId: 'Source', sort: 'asc' },
             { colId: 'Piece', sort: 'asc' },
             { colId: 'Voice', sort: 'asc' },
             { colId: 'Location', sort: 'asc' }
         ];
-        // gridOptions.api.setSortModel(sortModel);
+        gridOptions.api.setSortModel(sortModel);
+        */
 
         function getSelectedRows() {
             const selectedNodes = gridOptions.api.getSelectedNodes()
