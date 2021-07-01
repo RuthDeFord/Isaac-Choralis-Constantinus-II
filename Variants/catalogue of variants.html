@@ -98,7 +98,7 @@
         // let the grid know which columns and what data to use
         var gridOptions = {
             defaultColDef: {
-                sortable: false,
+                sortable: true,
                 filter: true, // set filtering on for all columns
                 wrapText: true,
                 autoHeight: true,
@@ -110,7 +110,8 @@
             rowSelection: 'multiple',
             rowGroupPanelShow: 'always',
             groupDefaultExpanded: -1,
-            multiSortKey: 'ctrl'
+            multiSortKey: 'ctrl',
+            suppresSorting: true
         };
 
         // lookup the container we want the Grid to use
